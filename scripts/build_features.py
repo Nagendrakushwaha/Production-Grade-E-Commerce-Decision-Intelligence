@@ -336,12 +336,13 @@ def build_all_features():
                 FROM (
                     SELECT
                         o.user_id,
-                        p.department,
+                        d.department,
                         count(*) AS dept_count
                     FROM order_products__prior opp
                     JOIN orders o ON opp.order_id = o.order_id
                     JOIN products p ON opp.product_id = p.product_id
-                    GROUP BY o.user_id, p.department
+                    JOIN departments d ON p.department_id = d.department_id
+                    GROUP BY o.user_id, d.department
                 )
             )
             SELECT
