@@ -521,9 +521,10 @@ def build_all_features():
     # Department level co-occurrence affinity matrix
     dept_co_query = """
         WITH order_depts AS (
-            SELECT DISTINCT opp.order_id, p.department
+            SELECT DISTINCT opp.order_id, d.department
             FROM order_products__prior opp
             JOIN products p ON opp.product_id = p.product_id
+            JOIN departments d ON p.department_id = d.department_id
             WHERE opp.order_id % 10 = 0 -- 10% representative sample for matrix speed
         )
         SELECT
