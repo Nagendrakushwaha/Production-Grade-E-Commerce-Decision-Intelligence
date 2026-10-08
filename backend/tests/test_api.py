@@ -142,3 +142,37 @@ def test_decision_engine():
     data = res.json()
     assert "decisions" in data
     assert len(data["decisions"]) >= 4
+
+
+if __name__ == "__main__":
+    tests = [
+        ("Healthcheck", test_health),
+        ("Executive Overview", test_overview),
+        ("Data Quality & Lineage", test_data_quality),
+        ("Customer Intelligence", test_customers),
+        ("Product Intelligence", test_product_intelligence),
+        ("Market Basket Analysis", test_market_basket),
+        ("Demand & Forecasting", test_demand),
+        ("Anomaly Radar", test_anomalies),
+        ("Customer Journey", test_customer_journey),
+        ("3D Spaces", test_3d_spaces),
+        ("Model Laboratory", test_model_laboratory),
+        ("Predict Endpoint", test_predict_endpoint),
+        ("Business Simulator", test_simulate_endpoint),
+        ("Decision Engine", test_decision_engine),
+    ]
+    print("=" * 65)
+    print("RUNNING API & ANALYTICS INTEGRATION TEST SUITE")
+    print("=" * 65)
+    passed = 0
+    for name, test_fn in tests:
+        try:
+            test_fn()
+            print(f"  [✓] {name:<30} PASSED")
+            passed += 1
+        except Exception as e:
+            print(f"  [✗] {name:<30} FAILED: {e}")
+    print("=" * 65)
+    print(f"RESULTS: {passed}/{len(tests)} tests passed successfully!")
+    print("=" * 65)
+
