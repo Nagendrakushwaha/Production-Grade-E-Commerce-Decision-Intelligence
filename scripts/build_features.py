@@ -363,10 +363,10 @@ def build_all_features():
         ) TO '{cust_pq_path}' (FORMAT PARQUET, COMPRESSION 'ZSTD')
     """)
 
-    # Load customer sample for clustering & RFP score distribution (20,000 customers for statistical rigor & fast clustering)
+    # Load customer sample for clustering & RFP score distribution (25,000 customers for statistical rigor & fast clustering)
     cust_df = con.execute(f"""
         SELECT * FROM read_parquet('{cust_pq_path}')
-        USING SAMPLE 25000 (BERNOULLI, 42)
+        USING SAMPLE 25000 (reservoir, 42)
     """).fetchdf()
 
     # RFP Scoring (Recency, Frequency, Product diversity proxy)
