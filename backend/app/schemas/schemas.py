@@ -170,6 +170,7 @@ class ModelLaboratoryResponse(BaseModel):
     threshold_analysis: List[Dict[str, Any]]
     cross_validation: Dict[str, Any]
     feature_importance: List[Dict[str, Any]]
+    shap_analysis: Optional[Dict[str, Any]] = None
     leakage_audit: Dict[str, str]
 
 
