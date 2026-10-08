@@ -23,7 +23,7 @@ export const PlotlyChart: React.FC<PlotlyChartProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const defaultThemeLayout = {
+    const defaultThemeLayout: Record<string, any> = {
       autosize: true,
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'transparent',
