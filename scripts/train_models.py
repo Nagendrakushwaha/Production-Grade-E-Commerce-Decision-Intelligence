@@ -33,7 +33,7 @@ from sklearn.metrics import (
     precision_recall_curve,
     precision_score,
     recall_score,
-    roc_auc_curve,
+    roc_auc_score,
     roc_curve,
     auc,
 )
@@ -78,7 +78,7 @@ def train_and_evaluate():
         SELECT DISTINCT user_id, order_id AS train_order_id
         FROM orders
         WHERE eval_set = 'train'
-        USING SAMPLE 5000 (reservoir, 42)
+        USING SAMPLE 12000 (reservoir, 42)
     ),
     -- Historical user stats from prior orders
     user_priors AS (
