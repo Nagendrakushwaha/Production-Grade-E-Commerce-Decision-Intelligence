@@ -1,3 +1,8 @@
+import sys
+from pathlib import Path
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
 import pytest
 from fastapi.testclient import TestClient
 from backend.app.main import app
@@ -145,6 +150,13 @@ def test_decision_engine():
 
 
 if __name__ == "__main__":
+    if sys.platform == "win32":
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+            sys.stderr.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
     tests = [
         ("Healthcheck", test_health),
         ("Executive Overview", test_overview),
@@ -168,10 +180,10 @@ if __name__ == "__main__":
     for name, test_fn in tests:
         try:
             test_fn()
-            print(f"  [✓] {name:<30} PASSED")
+            print(f"  [PASS] {name:<30} OK")
             passed += 1
         except Exception as e:
-            print(f"  [✗] {name:<30} FAILED: {e}")
+            print(f"  [FAIL] {name:<30} ERROR: {e}")
     print("=" * 65)
     print(f"RESULTS: {passed}/{len(tests)} tests passed successfully!")
     print("=" * 65)
