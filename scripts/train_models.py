@@ -272,7 +272,7 @@ def train_and_evaluate():
         prec = precision_score(y_test, preds, zero_division=0)
         rec = recall_score(y_test, preds, zero_division=0)
         f1 = f1_score(y_test, preds, zero_division=0)
-        roc_auc = auc(*roc_curve(y_test, probs)[:2][::-1])
+        roc_auc = roc_auc_score(y_test, probs)
         pr_prec, pr_rec, _ = precision_recall_curve(y_test, probs)
         pr_auc = auc(pr_rec, pr_prec)
         ll = log_loss(y_test, probs)
@@ -370,7 +370,7 @@ def train_and_evaluate():
         f_prec = precision_score(y_cv[val_idx], fold_preds, zero_division=0)
         f_rec = recall_score(y_cv[val_idx], fold_preds, zero_division=0)
         f_f1 = f1_score(y_cv[val_idx], fold_preds, zero_division=0)
-        f_auc = auc(*roc_curve(y_cv[val_idx], fold_probs)[:2][::-1])
+        f_auc = roc_auc_score(y_cv[val_idx], fold_probs)
 
         cv_scores["accuracy"].append(f_acc)
         cv_scores["precision"].append(f_prec)
