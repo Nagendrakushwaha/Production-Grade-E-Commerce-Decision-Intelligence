@@ -483,27 +483,30 @@ def build_all_features():
 
     rules_query = f"""
         WITH top_p AS (
-            SELECT product_id, product_name, count(*) AS item_count
+            SELECT p.product_id, p.product_name, count(*) AS item_count
             FROM order_products__prior opp
             JOIN products p ON opp.product_id = p.product_id
-            GROUP BY product_id, product_name
+            GROUP BY p.product_id, p.product_name
             HAVING count(*) >= 8000
+        ),
+        top_orders AS (
+            SELECT opp.order_id, opp.product_id, tp.product_name, tp.item_count
+            FROM order_products__prior opp
+            JOIN top_p tp ON opp.product_id = tp.product_id
         ),
         pairs AS (
             SELECT
-                p1.product_id AS p1_id,
-                p1.product_name AS p1_name,
-                p2.product_id AS p2_id,
-                p2.product_name AS p2_name,
+                t1.product_id AS p1_id,
+                t1.product_name AS p1_name,
+                t2.product_id AS p2_id,
+                t2.product_name AS p2_name,
                 count(*) AS pair_count,
-                p1.item_count AS p1_count,
-                p2.item_count AS p2_count
-            FROM order_products__prior o1
-            JOIN order_products__prior o2 ON o1.order_id = o2.order_id AND o1.product_id < o2.product_id
-            JOIN top_p p1 ON o1.product_id = p1.product_id
-            JOIN top_p p2 ON o2.product_id = p2.product_id
-            GROUP BY p1.product_id, p1.product_name, p2.product_id, p2.product_name, p1.item_count, p2.item_count
-            HAVING count(*) >= 2500
+                t1.item_count AS p1_count,
+                t2.item_count AS p2_count
+            FROM top_orders t1
+            JOIN top_orders t2 ON t1.order_id = t2.order_id AND t1.product_id < t2.product_id
+            GROUP BY t1.product_id, t1.product_name, t2.product_id, t2.product_name, t1.item_count, t2.item_count
+            HAVING count(*) >= 1500
         )
         SELECT
             p1_name AS antecedent,
